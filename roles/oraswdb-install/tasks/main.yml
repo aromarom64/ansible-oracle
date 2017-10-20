@@ -177,6 +177,16 @@
     when: master_node and item.1.stdout != "1"
     #with_items: oracle_databases
     #when: master_node
+    become: yes
+    register: rootora
+    tags:
+      - runroot
+
+  - debug: msg="{{ rootora.results|map(attribute='stdout')|list }}"
+    with_together:
+      - "{{oracle_databases}}"
+      - "{{checkdbswinstall.results}}"
+    when: master_node and item.1.stdout != "1"
     tags:
       - runroot
 
